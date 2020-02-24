@@ -8,6 +8,9 @@ import (
 func main() {
 	var params gas.Params = gas.ParamsFromCommndline()
 	fmt.Println(params)
-	fmt.Println(gas.GetStationsFromTankerKoenig(params))
 
+	var stations = gas.GetStationsFromTankerKoenig(params)
+	fmt.Println(stations)
+
+	gas.StoreStatationsToInfluxDB(stations, params)
 }
