@@ -31,7 +31,7 @@ func StoreStatationsToInfluxDB(stations []Station, params Params) error {
 	}
 
 	for _, station := range stations {
-		point, err := client.NewPoint(station.Brand, map[string]string{
+		point, err := client.NewPoint("("+station.Brand+") "+station.Name, map[string]string{
 			"Name":   station.Name,
 			"ID":     station.ID,
 			"Street": station.Street,
