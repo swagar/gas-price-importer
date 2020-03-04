@@ -2,6 +2,7 @@ package gas
 
 import (
 	"fmt"
+	"time"
 
 	client "github.com/influxdata/influxdb1-client/v2"
 )
@@ -23,12 +24,15 @@ func StoreStatationsToInfluxDB(stations []Station, params Params) error {
 	bachtPoints, err := client.NewBatchPoints(client.BatchPointsConfig{
 		Database:        "gas-stations",
 		RetentionPolicy: "autogen",
+		Precision:       "m",
 	})
 
 	if err != nil {
 		fmt.Println("Error creating InfluxDB bachtPoints: ", err.Error())
 		return err
 	}
+
+	var time = time.Now()
 
 	for _, station := range stations {
 		point, err := client.NewPoint("("+station.Brand+") "+station.Name, map[string]string{
@@ -41,7 +45,7 @@ func StoreStatationsToInfluxDB(stations []Station, params Params) error {
 				"Diesel": station.Diesel,
 				"E10":    station.E10,
 				"E5":     station.E5,
-			})
+			}, time)
 
 		if err != nil {
 			fmt.Println("Error creating InfluxDB Point: ", err.Error())
